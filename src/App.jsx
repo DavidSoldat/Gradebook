@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Loading from './components/Loading';
 import Landing from './components/Landing';
+import subjectList from './data';
 import './index.css';
 
 function App() {
@@ -8,6 +9,9 @@ function App() {
   const [showAdd, setShowAdd] = useState(false);
 
   const [subject, setSubject] = useState('');
+  const [grades, setGrades] = useState([]);
+
+  const [subjectsList, setSubjectsList] = useState(subjectList);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -17,14 +21,21 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  function handleOnAdd() {
-    !showAdd && console.log('david');
+  function handleShowAdd() {
     setShowAdd(!showAdd);
-    // console.log(showAdd);
   }
 
   function handleAddSubmit(e) {
-    console.log(e);
+    e.preventDefault();
+
+    if (!grades || !subject) return;
+
+    const id = crypto.randomUUID();
+    const newSubject = {
+      id,
+      subject,
+      grades: [],
+    };
   }
 
   return (
@@ -33,9 +44,13 @@ function App() {
         <Loading />
       ) : (
         <Landing
-          handleOnAdd={handleOnAdd}
+          handleOnAdd={handleShowAdd}
           showAdd={showAdd}
           handleAddSubmit={handleAddSubmit}
+          grades={grades}
+          subject={subject}
+          subjectsList={subjectsList}
+          setSubjectsList={setSubjectsList}
         />
       )}
     </div>
