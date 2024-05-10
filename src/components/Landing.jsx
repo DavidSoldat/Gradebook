@@ -3,11 +3,13 @@ import SubjectsList from './SubjectsList';
 import AddForm from './AddForm';
 
 export default function Landing({
-  handleOnAdd,
+  handleShowAdd,
   showAdd,
+  handleInputChange,
+  newSubject,
   handleAddSubmit,
   subjectsList,
-  setSubjectsList,
+  handleRemoveSubject,
 }) {
   return (
     <div className=' h-screen bg-cover flex items-start justify-center bg-center w-2/3 p-10'>
@@ -31,24 +33,40 @@ export default function Landing({
           </p>
         </div>
         <div className='items-center justify-center mt-40 flex flex-col w-full'>
-          <SubjectsList list={subjectsList} setlist={setSubjectsList} />
+          <SubjectsList
+            list={subjectsList}
+            handleRemoveSubject={handleRemoveSubject}
+          />
 
-          {showAdd && <AddForm handleAddSubmit={handleAddSubmit} />}
-          {!showAdd ? (
-            <button
-              className='bg-[#0D3B66] text-[#F4D35E] hover:text-[#0D3B66] hover:bg-[#EE964B]  rounded-lg px-4 py-2 font-bold shadow-md hover:shadow-lg'
-              onClick={handleOnAdd}
-            >
-              Add subject
-            </button>
-          ) : (
-            <button
-              className='bg-[#F95738] text-[#F4D35E] rounded-lg px-4 py-2 font-bold shadow-md hover:shadow-lg'
-              onClick={handleOnAdd}
-            >
-              Close
-            </button>
+          {showAdd && (
+            <AddForm
+              handleAddSubmit={handleAddSubmit}
+              newSubject={newSubject}
+              handleInputChange={handleInputChange}
+            />
           )}
+          <div className='flex flex-row gap-5'>
+            {!showAdd ? (
+              <button
+                className='bg-[#0D3B66] text-[#F4D35E] rounded-lg px-4 py-2 font-bold shadow-md hover:shadow-lg'
+                onClick={handleShowAdd}
+              >
+                Add subject
+              </button>
+            ) : (
+              <button
+                className='bg-[#F95738] text-[#F4D35E] rounded-lg px-4 py-2 font-bold shadow-md hover:shadow-lg'
+                onClick={handleShowAdd}
+              >
+                Close
+              </button>
+            )}
+            {subjectsList.length > 0 && (
+              <button className='bg-[#EE964B] text-[#0D3B66] rounded-lg px-4 py-2 font-bold shadow-md hover:shadow-lg'>
+                Remove All
+              </button>
+            )}
+          </div>
         </div>
       </motion.div>
     </div>

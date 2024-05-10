@@ -2,14 +2,18 @@ import { useEffect, useState } from 'react';
 import Loading from './components/Loading';
 import Landing from './components/Landing';
 import subjectList from './data';
+import { v4 as uuidv4 } from 'uuid';
 import './index.css';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
 
-  const [subject, setSubject] = useState('');
-  const [grades, setGrades] = useState([]);
+  const [newSubject, setNewSubject] = useState({
+    id: 0,
+    subject: '',
+    grades: '',
+  });
 
   const [subjectsList, setSubjectsList] = useState(subjectList);
 
@@ -25,17 +29,38 @@ function App() {
     setShowAdd(!showAdd);
   }
 
+  function handleInputChange(e) {
+    const { name, value } = e.target;
+    setNewSubject((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
   function handleAddSubmit(e) {
     e.preventDefault();
 
-    if (!grades || !subject) return;
-
-    const id = crypto.randomUUID();
-    const newSubject = {
-      id,
-      subject,
-      grades: [],
+    const newSubjectWithGrades = {
+      ...newSubject,
+      grades: newSubject.grades
+        .split(',')
+        .map((grade) => parseInt(grade.trim())),
+      id: uuidv4(),
     };
+
+    setSubjectsList((prevList) => [...prevList, newSubjectWithGrades]);
+    setNewSubject({
+      subject: '',
+      grades: '',
+    });
+
+    setShowAdd(!showAdd);
+  }
+
+  function handleRemoveSubject(id) {
+    setSubjectsList((prevList) =>
+      prevList.filter((subject) => subject.id !== id)
+    );
   }
 
   return (
@@ -44,13 +69,13 @@ function App() {
         <Loading />
       ) : (
         <Landing
-          handleOnAdd={handleShowAdd}
+          handleShowAdd={handleShowAdd}
           showAdd={showAdd}
+          handleInputChange={handleInputChange}
+          newSubject={newSubject}
           handleAddSubmit={handleAddSubmit}
-          grades={grades}
-          subject={subject}
           subjectsList={subjectsList}
-          setSubjectsList={setSubjectsList}
+          handleRemoveSubject={handleRemoveSubject}
         />
       )}
     </div>

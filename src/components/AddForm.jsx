@@ -1,13 +1,14 @@
-export default function AddForm(
+export default function AddForm({
   handleAddSubmit,
-  setGrades,
-  setSubject,
-  grades,
-  subject
-) {
+  handleInputChange,
+  newSubject,
+}) {
   return (
     <div className='pb-2'>
-      <form className='shadow p-10 border-2 bg-gray-50 rounded-lg flex gap-3'>
+      <form
+        className='shadow p-10 border-2 bg-gray-50 rounded-lg flex gap-3'
+        onSubmit={handleAddSubmit}
+      >
         <div>
           <label className='mr-1 text-lg text-[#0D3B66] font-semibold'>
             Subject:
@@ -15,10 +16,10 @@ export default function AddForm(
           <input
             type='text'
             className='rounded-lg border p-1'
-            id='subjectName'
+            name='subject'
             placeholder='E.g. Geography'
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
+            value={newSubject.subject}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -29,14 +30,12 @@ export default function AddForm(
             type='text'
             className='rounded-lg border p-1'
             placeholder='E.g. 4,2,4'
-            value={grades}
-            onChange={(e) => setGrades(e.target.value)}
+            name='grades'
+            value={newSubject.grades}
+            onChange={handleInputChange}
           />
         </div>
-        <button
-          type='submit'
-          className='bg-[#0D3B66] text-[#F4D35E] rounded-lg px-4 font-semibold shadow-md hover:shadow-lg'
-        >
+        <button className='bg-[#0D3B66] text-[#F4D35E] rounded-lg px-4 font-semibold shadow-md hover:shadow-lg'>
           Add
         </button>
       </form>
